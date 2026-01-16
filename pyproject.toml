@@ -1,0 +1,18 @@
+[project]
+name = "Argentine_Speech_Evaluation_Corpus"
+version = "0.1.0"
+description = "Utils to create an argentine speech corpus with extensive metadata."
+authors = [
+    {name = "Matías Di Bernardo",email = "matias.di.bernardo@hotmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+  "pesto-pitch",       
+  "pymcd",             
+  "pyroomacoustics",   
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
