@@ -1,0 +1,2 @@
+audio_filename,transcript_filename,has_filler,has_laughter,num_speakers,gen_speakers,source,copyright,region
+audio_0010.wav,transcript_0010.txt,0,0,1,M,Television,0,BsAs

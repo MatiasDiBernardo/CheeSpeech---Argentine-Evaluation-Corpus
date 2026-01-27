@@ -1,0 +1,2 @@
+audio_filename,transcript_filename,has_filler,has_laughter,num_speakers,gen_speakers,source,copyright,region
+audio_0008.wav,transcript_0008.txt,0,1,1,F,Entrevista,,BsAs
