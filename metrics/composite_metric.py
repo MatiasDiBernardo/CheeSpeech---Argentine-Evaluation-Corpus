@@ -1,7 +1,7 @@
-from Metrics.hours_duration import calculate_time_hours
-from Metrics.audio_quality import calculate_audio_quality
-from Metrics.acoustic_parameters import calculate_acoustic_parameters
-from Metrics.speech_dif import calculate_speech_dif, calculate_MCD
+from metrics.hours_duration import calculate_time_hours
+from metrics.audio_quality import calculate_audio_quality
+from metrics.acoustic_parameters import calculate_acoustic_parameters
+from metrics.speech_dif import calculate_speech_dif, calculate_MCD
 
 def calculate_composite_metric(folder_path_original, folder_path_processed):    
     """Calculate composite metric for audio quality evaluation.
