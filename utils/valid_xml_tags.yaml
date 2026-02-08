@@ -1,0 +1,58 @@
+risa:
+  req_attrs: []
+  opt_attrs: []
+  req_text: false
+
+entre_risas:
+  req_attrs: []
+  opt_attrs: []
+  req_text: true
+
+alargamiento:
+  req_attrs:
+    - palabra
+  opt_attrs: []
+  req_text: true
+
+siglas:
+  req_attrs: []
+  opt_attrs: []
+  req_text: true
+
+extranjero:
+  req_attrs: []
+  opt_attrs: []
+  req_text: true
+
+ruido:
+  req_attrs: []
+  opt_attrs:
+    - tipo
+  req_text: false
+
+mala_pronunciacion:
+  req_attrs:
+    - palabra
+  opt_attrs: []
+  req_text: false
+
+filler:
+  req_attrs: []
+  opt_attrs: []
+  req_text: true
+
+palabra_cortada:
+  req_attrs:
+    - palabra
+  opt_attrs: []
+  req_text: true
+
+simultaneo:
+  req_attrs: []
+  opt_attrs: []
+  req_text: false
+
+ininteligible:
+  req_attrs: []
+  opt_attrs: []
+  req_text: false

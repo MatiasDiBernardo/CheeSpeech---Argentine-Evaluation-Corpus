@@ -1,3 +1,6 @@
 /data/audios
 /data_augmented
 /env
+/results/*
+*.xlsx
+*.pyc

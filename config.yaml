@@ -1,0 +1,18 @@
+# Global 
+test: true
+verbose: true
+validate_xml_tags: false
+
+ASR:
+  type: "Whisper"
+  model_name: "whisper_base"
+  Whisper:
+    model_size: "base"
+
+Normalization:
+  remove_all_punctuation: true    # if true, removes all punctuation. If false, keeps grammatically relevant punctuation (.,;?!).
+  normalize_uppercase: true
+  filler_symbol: ''    # Symbol to replace the content of <filler> tags. If empty, removes the tag and its content.
+  special_attribute_config:   # Tags that when replaced, keeps the value of the attribute instead of the internal text.  
+    # tag_name: attribute_name
+    alargamiento: "palabra"
