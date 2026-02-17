@@ -1,0 +1,3 @@
+﻿audio_filename,wer,cer,wer_S,wer_D,wer_I,N_words,GT_trans,pred_trans,GT_trans_norm,pred_trans_norm
+audio_0014.wav,0.0,0.0,0,0,0,7,"No entiendo. Ya lo vas a entender.
+", No entiendo. Ya lo vas a entender.,no entiendo ya lo vas a entender,no entiendo ya lo vas a entender

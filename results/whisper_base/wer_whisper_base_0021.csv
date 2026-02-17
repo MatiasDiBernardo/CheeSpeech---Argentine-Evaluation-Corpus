@@ -1,0 +1,3 @@
+﻿audio_filename,wer,cer,wer_S,wer_D,wer_I,N_words,GT_trans,pred_trans,GT_trans_norm,pred_trans_norm
+audio_0021.wav,0.043478260869565216,0.014814814814814815,1,0,0,23,"Hoy no podemos hacer choripan porque hay lluvia. // Mucha lluvia. ¿Dondé están los choripaneros si hay lluvia? / Se te apaga la parrilla hermano.
+", Hoy no podemos hacer choripán porque hay lluvia. Mucha lluvia donde están los choripaneros y hay lluvia. Se te apaga la parrilla hermano.,hoy no podemos hacer choripan porque hay lluvia mucha lluvia donde estan los choripaneros si hay lluvia se te apaga la parrilla hermano,hoy no podemos hacer choripan porque hay lluvia mucha lluvia donde estan los choripaneros y hay lluvia se te apaga la parrilla hermano

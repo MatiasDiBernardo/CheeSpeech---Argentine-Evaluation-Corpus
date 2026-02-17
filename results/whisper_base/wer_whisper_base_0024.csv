@@ -1,0 +1,3 @@
+﻿audio_filename,wer,cer,wer_S,wer_D,wer_I,N_words,GT_trans,pred_trans,GT_trans_norm,pred_trans_norm
+audio_0024.wav,0.5555555555555556,0.48520710059171596,5,10,0,27,"¿Cuántas personas viven en el planeta Tierra, Nacho? <filler>Eeh</filler> Miles de millones. siete mil ochocientos millones. Tenés que hacer uno coma setenta y ocho dividido siete mil ochocientos.
+"," ¿Cuántas personas viven en el planeta Tierra Nacho? Eh... 7800 millones. Tens que hacer 1,78, dividido 7800.",cuantas personas viven en el planeta tierra nacho miles de millones siete mil ochocientos millones tenes que hacer uno coma setenta y ocho dividido siete mil ochocientos,cuantas personas viven en el planeta tierra nacho eh 7800 millones tens que hacer 178 dividido 7800
