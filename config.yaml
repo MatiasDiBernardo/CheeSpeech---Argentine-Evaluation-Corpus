@@ -5,9 +5,9 @@ validate_xml_tags: false
 
 ASR:
   type: "Whisper"
-  model_name: "whisper_base"
+  model_name: "whisper_tiny"
   Whisper:
-    model_size: "base"
+    model_size: "tiny"    # Options: tiny, base, small, medium, large
 
 Normalization:
   remove_all_punctuation: true    # if true, removes all punctuation. If false, keeps grammatically relevant punctuation (.,;?!).

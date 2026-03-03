@@ -1,7 +1,7 @@
 import os
 import jiwer
 import pandas as pd
-import utils.xml as xml
+import chee_speech.utils.xml as xml
 
 def get_transcript_scores(audio_filename, model_name, text_ref, text_hyp, remove_all_punctuation, normalize_uppercase, allowed_special_chars, attribute_config=None, save_csv=True):
     """

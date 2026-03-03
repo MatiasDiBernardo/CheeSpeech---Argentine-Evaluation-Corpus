@@ -1,5 +1,6 @@
 /data/audios
 /data_augmented
 /env
+/.venv
 *.xlsx
 *.pyc

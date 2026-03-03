@@ -10,7 +10,7 @@ with open("config.yaml", "r") as f:
 VERBOSE = config["verbose"]
 
 # Load XML tags from YAML
-with open(os.path.join("utils", "valid_xml_tags.yaml"), "r") as f:
+with open(os.path.join("chee_speech", "utils", "valid_xml_tags.yaml"), "r") as f:
     _tags_raw = yaml.safe_load(f)
 
 # Convert lists to sets for efficient attribute validation

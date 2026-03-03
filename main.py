@@ -3,8 +3,8 @@ import yaml
 import tqdm
 import pandas as pd
 
-from ASR.whisper import get_model
-from analytics.wer import get_transcript_scores
+from chee_speech.ASR.whisper import get_model
+from chee_speech.analytics.wer import get_transcript_scores
 
 # Carga configuración
 with open("config.yaml", "r") as f:
@@ -79,11 +79,8 @@ def transcribe_folder_and_score(audio_folder, transcript_folder, model_name, rem
         # Transcribe audio
         audio_path = os.path.join(audio_folder, audio_file)
 
-        if VERBOSE:
-            print(f"Transcribing {audio_file}...")
-
         # If is not Whisper, could have errors. Best should be to implement a function in ASR module.
-        text_hyp = asr_model.transcribe(audio_path)["text"]
+        text_hyp = asr_model.transcribe(audio_path, fp16=False)["text"]
         
         # Calculate scores
         wer_score, cer_score, wer_s, wer_d, wer_i, word_count = get_transcript_scores(audio_file, model_name, text_ref, text_hyp,
@@ -126,7 +123,7 @@ def transcribe_folder_and_score(audio_folder, transcript_folder, model_name, rem
 
 if __name__ == "__main__":
     if VALIDATE_XML_TAGS:
-        import utils.xml as xml
+        import chee_speech.utils.xml as xml
         if VERBOSE:
             print("Validando etiquetas XML de las transcripciones...")
         errors_found = xml.validate_folder(os.path.join("data", "transcripts"))
@@ -136,6 +133,10 @@ if __name__ == "__main__":
         else:
             if VERBOSE:
                 print("✅ Validación XML completada sin errores.")
+
+    if os.path.exists(os.path.join("results", f"summary_wer_{ASR_NAME}.csv")):
+        print(f"Ya existe un resumen de WER para el modelo {ASR_NAME}. Continuá para sobreescribirlo.")
+        input("Presiona Enter para continuar o Ctrl+C para cancelar...")
 
     transcribe_folder_and_score(os.path.join("data", "audios"), os.path.join("data", "transcripts"), ASR_NAME, REMOVE_ALL_PUNCTUATION, NORMALIZE_UPPERCASE,
                                  FILLER_SYMBOL, special_attribute_config)
