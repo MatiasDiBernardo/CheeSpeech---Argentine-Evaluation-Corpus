@@ -1,5 +1,26 @@
 # Argentine Benchmark
+
 This repository contains utils to create an argentine speech corpus with extensive metadata, such as ASR transcription, data augmentation, WER and CER evaluation.
+
+## ASR Leaderboard 
+
+<table>
+    <thead>
+        <tr> <th rowspan=2>Model</th> <th rowspan=2>Avg WER</th> <th rowspan=2>Global WER</th> <th colspan=2>Bs. As.</th> <th colspan=2>Centro</th> </tr>
+        <tr>
+                                                                                    <th>Avg WER</th><th>Global WER</th>  <th >Avg WER</th><th>Global WER</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr> <td>Whisper Turbo </td>  <td> - %</td> <td> - %</td>  <td>11,1 %</td> <td>11,6 %</td>  <td> - %</td> <td> - %</td>  </tr>
+        <tr> <td>Whisper Large </td>  <td> - %</td> <td> - %</td>  <td>11,6 %</td> <td>12,3 %</td>  <td> - %</td> <td> - %</td>  </tr>
+        <tr> <td>Whisper Medium </td>  <td> - %</td> <td> - %</td>  <td>14 %</td> <td>14,5 %</td>  <td> - %</td> <td> - %</td>  </tr>
+        <tr> <td>Whisper Small </td>  <td> - %</td> <td> - %</td>  <td>17,3 %</td> <td>17,2 %</td>  <td> - %</td> <td> - %</td>  </tr>
+        <tr> <td>Whisper Base </td>  <td> - %</td> <td> - %</td>  <td>23,6 %</td> <td>24,3 %</td>  <td> - %</td> <td> - %</td>  </tr>
+        <tr> <td>Whisper Tiny </td>  <td> - %</td> <td> - %</td>  <td>35,1 %</td> <td>34,2 %</td>  <td> - %</td> <td> - %</td>  </tr>
+    </tbody>
+</table>
+
 
 ## Main Configuration (`config.yaml`)
 
@@ -13,7 +34,7 @@ The `config.yaml` file allows you to adjust key parameters for each stage of the
 - **ASR (Automatic Speech Recognition)**
     - `type`: Only Whisper model at the moment.
     - `model_name`: Personalized name given to a set of results, used for naming the folder and csv files.
-    ***Whisper***
+    - **Whisper**
        - `model_size`: Whisper model size ("small", "large", "turbo", etc.).
 
 - **Normalization (for WER and CER evalutaion)**
@@ -41,14 +62,13 @@ Create a virtual environment:
 ```bash
 python -m venv .venv
 ```
-Activate it:
+Activate it (on macOS/Linux):
 ```bash
-# macOS / Linux
 source .venv/bin/activate
 ```
 
+or on Windows:
 ```bash
-# Windows
 ".venv/Scripts/activate.bat"
 ```
 

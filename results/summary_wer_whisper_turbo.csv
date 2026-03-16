@@ -1,0 +1,2 @@
+﻿Average_WER,Average_CER,Global_WER,Total_Substitutions,Total_Deletions,Total_Insertions,Total_Words
+0.11079625542520763,0.07523813503153066,0.11563636363636363,48,90,21,1375

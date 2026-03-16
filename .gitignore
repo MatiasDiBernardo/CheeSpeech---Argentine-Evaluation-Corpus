@@ -2,5 +2,6 @@
 /data_augmented
 /env
 /.venv
+/.vscode
 *.xlsx
 *.pyc

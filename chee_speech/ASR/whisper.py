@@ -6,6 +6,7 @@ with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
 asr_config = config["ASR"]
+VERBOSE = config["verbose"]
 MODEL_SIZE = asr_config["Whisper"]["model_size"]
 
 def get_model():
@@ -14,6 +15,8 @@ def get_model():
     Returns:
         whisper.Whisper: Instancia del modelo de Whisper cargado.
     """
+    if VERBOSE:
+        print(f"Cargando modelo Whisper '{MODEL_SIZE}'...")
     return whisper.load_model(MODEL_SIZE)
 
 # def asr_whisper(audio_path):
