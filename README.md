@@ -12,12 +12,12 @@ This repository contains utils to create an argentine speech corpus with extensi
         </tr>
     </thead>
     <tbody>
-        <tr> <td>Whisper Turbo </td>  <td> - %</td> <td> - %</td>  <td>11,1 %</td> <td>11,6 %</td>  <td> - %</td> <td> - %</td>  </tr>
-        <tr> <td>Whisper Large </td>  <td> - %</td> <td> - %</td>  <td>11,6 %</td> <td>12,3 %</td>  <td> - %</td> <td> - %</td>  </tr>
-        <tr> <td>Whisper Medium </td>  <td> - %</td> <td> - %</td>  <td>14 %</td> <td>14,5 %</td>  <td> - %</td> <td> - %</td>  </tr>
-        <tr> <td>Whisper Small </td>  <td> - %</td> <td> - %</td>  <td>17,3 %</td> <td>17,2 %</td>  <td> - %</td> <td> - %</td>  </tr>
-        <tr> <td>Whisper Base </td>  <td> - %</td> <td> - %</td>  <td>23,6 %</td> <td>24,3 %</td>  <td> - %</td> <td> - %</td>  </tr>
-        <tr> <td>Whisper Tiny </td>  <td> - %</td> <td> - %</td>  <td>35,1 %</td> <td>34,2 %</td>  <td> - %</td> <td> - %</td>  </tr>
+        <tr> <td>Whisper Turbo </td>  <td>13,5 %</td> <td>13,5 %</td>  <td>11,1 %</td> <td>11,6 %</td>  <td>14,9 %</td> <td>15,4 %</td>  </tr>
+        <tr> <td>Whisper Large </td>  <td>14,5 %</td> <td>14,5 %</td>  <td>11,6 %</td> <td>12,3 %</td>  <td>16,3 %</td> <td>16,6 %</td>  </tr>
+        <tr> <td>Whisper Medium </td>  <td>17,9 %</td> <td>18 %</td>  <td>14 %</td> <td>14,5 %</td>  <td>20,8 %</td> <td>21,4 %</td>  </tr>
+        <tr> <td>Whisper Small </td>  <td>21,8 %</td> <td>21,9 %</td>  <td>17,3 %</td> <td>17,2 %</td>  <td>25,6 %</td> <td>26,5 %</td>  </tr>
+        <tr> <td>Whisper Base </td>  <td>32,2 %</td> <td>32,3 %</td>  <td>23,6 %</td> <td>24,3 %</td>  <td>39,6 %</td> <td>40,1 %</td>  </tr>
+        <tr> <td>Whisper Tiny </td>  <td>41 %</td> <td>41,1 %</td>  <td>35,1 %</td> <td>34,2 %</td>  <td>47,5 %</td> <td>47,7 %</td>  </tr>
     </tbody>
 </table>
 

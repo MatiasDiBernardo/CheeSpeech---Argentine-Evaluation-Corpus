@@ -3,7 +3,7 @@ import yaml
 import tqdm
 import pandas as pd
 
-from chee_speech.ASR.whisper import get_model
+from chee_speech.ASR.whisper import get_model, number_tokens
 from chee_speech.analytics.wer import get_transcript_scores
 
 # Carga configuración
@@ -13,6 +13,7 @@ with open("config.yaml", "r") as f:
 TEST = config["test"]
 VERBOSE = config["verbose"]
 VALIDATE_XML_TAGS = config["validate_xml_tags"]
+DATASET_NAME = config["dataset_name"]
 
 asr_config = config["ASR"]
 ASR_TYPE = asr_config["type"]
@@ -80,7 +81,7 @@ def transcribe_folder_and_score(audio_folder, transcript_folder, model_name, rem
         audio_path = os.path.join(audio_folder, audio_file)
 
         # If is not Whisper, could have errors. Best should be to implement a function in ASR module.
-        text_hyp = asr_model.transcribe(audio_path, fp16=False)["text"]
+        text_hyp = asr_model.transcribe(audio_path, fp16=False, suppress_tokens=number_tokens)["text"] # Encourage the model to transcribe numbers as text.
         
         # Calculate scores
         wer_score, cer_score, wer_s, wer_d, wer_i, word_count = get_transcript_scores(audio_file, model_name, text_ref, text_hyp,
@@ -109,6 +110,8 @@ def transcribe_folder_and_score(audio_folder, transcript_folder, model_name, rem
 
     if save_csv:
         df = pd.DataFrame({
+            'Model': [model_name],
+            'Dataset': [DATASET_NAME],
             'Average_WER': [avg_wer],
             'Average_CER': [avg_cer],
             'Global_WER': [global_wer],
@@ -117,7 +120,7 @@ def transcribe_folder_and_score(audio_folder, transcript_folder, model_name, rem
             'Total_Insertions': [total_insertions],
             'Total_Words': [total_words]
         })
-        df.to_csv(f"results/summary_wer_{model_name}.csv", index=False, encoding='utf-8-sig')
+        df.to_csv(f"results/summary_wer_{model_name.lower().replace(' ', '_')}_{DATASET_NAME.lower()}.csv", index=False, encoding='utf-8-sig')
 
     return total_wer, total_cer, global_wer, total_substitutions + total_deletions + total_insertions, total_words
 

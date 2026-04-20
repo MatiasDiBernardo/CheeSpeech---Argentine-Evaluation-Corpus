@@ -2,12 +2,13 @@
 test: true
 verbose: true
 validate_xml_tags: false
+dataset_name: "Centro"
 
 ASR:
   type: "Whisper"
-  model_name: "whisper_base"
+  model_name: "Whisper Large"
   Whisper:
-    model_size: "base"    # Options: tiny, base, small, medium, large, turbo
+    model_size: "large"    # Options: tiny, base, small, medium, large, turbo
 
 Normalization:
   remove_all_punctuation: true    # if true, removes all punctuation. If false, keeps grammatically relevant punctuation (.,;?!).

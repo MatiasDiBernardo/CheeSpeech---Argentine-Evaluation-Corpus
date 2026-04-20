@@ -17,7 +17,7 @@ def get_model():
     """
     if VERBOSE:
         print(f"Cargando modelo Whisper '{MODEL_SIZE}'...")
-    return whisper.load_model(MODEL_SIZE) 
+    return whisper.load_model(MODEL_SIZE)
 
 
 #encourage model to transcribe words literally
