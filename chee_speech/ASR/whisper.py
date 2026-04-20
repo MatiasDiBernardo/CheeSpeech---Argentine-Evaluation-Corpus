@@ -17,7 +17,16 @@ def get_model():
     """
     if VERBOSE:
         print(f"Cargando modelo Whisper '{MODEL_SIZE}'...")
-    return whisper.load_model(MODEL_SIZE)
+    return whisper.load_model(MODEL_SIZE) 
+
+
+#encourage model to transcribe words literally
+tokenizer = whisper.tokenizer.get_tokenizer(multilingual=True)  # use multilingual=True if using multilingual model
+number_tokens = [
+    i
+    for i in range(tokenizer.eot)
+    if all(c in "0123456789" for c in tokenizer.decode([i]).removeprefix(" "))
+]
 
 # def asr_whisper(audio_path):
 #     """Aplica Whisper para Speech-To-Text a un audio y devuelve un string con la transcripción.
