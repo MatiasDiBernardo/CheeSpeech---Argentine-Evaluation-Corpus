@@ -42,9 +42,9 @@ filler:
   req_text: true
 
 palabra_cortada:
-  req_attrs:
+  req_attrs: []
+  opt_attrs: 
     - palabra
-  opt_attrs: []
   req_text: true
 
 simultaneo:
