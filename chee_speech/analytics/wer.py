@@ -1,9 +1,10 @@
 import os
 import jiwer
 import pandas as pd
+from numpy import round
 import chee_speech.utils.normalization as norm
 
-def get_transcript_scores(audio_filename, model_name, text_ref, text_hyp, remove_all_punctuation, normalize_uppercase, allowed_special_chars, attribute_config=None, save_csv=True, csv_filename=None):
+def get_transcript_scores(audio_filename, scores_key_name, text_ref, text_hyp, remove_all_punctuation, normalize_uppercase, allowed_special_chars, attribute_config=None, save_csv=True):
     """
     Calculates WER and CER between reference and hypothesis text after normalizing them.
     """
@@ -19,8 +20,8 @@ def get_transcript_scores(audio_filename, model_name, text_ref, text_hyp, remove
         num = audio_filename.split('_')[-1].split('.')[0]
         df = pd.DataFrame({
             'audio_filename': [audio_filename],
-            'wer': [output.wer],
-            'cer': [cer_score],
+            'wer': [round(output.wer * 100, 4)],
+            'cer': [round(cer_score * 100, 4)],
             'wer_S': [output.substitutions],
             'wer_D': [output.deletions],
             'wer_I': [output.insertions],
@@ -30,8 +31,6 @@ def get_transcript_scores(audio_filename, model_name, text_ref, text_hyp, remove
             'GT_trans_norm': [text_ref_norm],
             'pred_trans_norm': [text_hyp_norm]
         })
-        if csv_filename is None:
-            csv_filename = f"wer_{model_name}.csv"
-        df.to_csv(os.path.join("results", f"{model_name.lower().replace(' ', '_')}", f"{csv_filename}_{num}"), index=False, encoding='utf-8-sig')
+        df.to_csv(os.path.join("results", scores_key_name, f"wer_{scores_key_name}_{num}.csv"), index=False, encoding='utf-8-sig')
 
     return output.wer, cer_score, output.substitutions, output.deletions, output.insertions, word_count

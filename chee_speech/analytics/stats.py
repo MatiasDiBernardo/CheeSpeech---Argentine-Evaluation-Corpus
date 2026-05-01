@@ -90,6 +90,7 @@ def get_metadata_stats(folder):
     print("\n¡Proceso completado!")
 
 def get_wer_scores(folder):
+    '''Iterates through the folder with results, reads the WER scores from each CSV and returns them as lists for plotting. Also returns the model name for labeling.'''
     csv_files = [f for f in os.listdir(folder) if f.endswith(".csv")]
     
     if not csv_files:
@@ -173,22 +174,22 @@ if __name__ == "__main__":
 
     # get_metadata_stats(folder)
 
-    # models = ["whisper_tiny", "whisper_base", "whisper_small", "whisper_medium"]
-    # colors = ["tab:blue", "tab:orange", "tab:green", "tab:red"]
-    # wers = []
-    # audio_nums_arr = []
+    # models = ["whisper_tiny", "whisper_base"] #, "whisper_small", "whisper_medium"]
+    colors = ["tab:blue", "tab:orange"] #, "tab:green", "tab:red"]
+    wers = []
+    audio_nums_arr = []
     # for model in models:
-    # audio_nums, wer_scores, model_name = get_wer_scores(os.path.join("results", "Centro_0", "whisper_small_centro"))
-    # wers.append(wer_scores)
-    # audio_nums_arr.append(audio_nums)
-    # audio_nums, wer_scores, model_name = get_wer_scores(os.path.join("results", "whisper_small_centro"))    
-    # wers.append(wer_scores)
-    # audio_nums_arr.append(audio_nums)        
-    # plot_wer_scores(wers, audio_nums_arr, ["sm-antes", "sm-despues"], ["tab:blue", "tab:orange"])
+    audio_nums, wer_scores, model_name = get_wer_scores(os.path.join("results", "whisper_tiny_cheespeech"))    
+    wers.append(np.array(wer_scores))
+    audio_nums_arr.append(audio_nums)
+    audio_nums, wer_scores, model_name = get_wer_scores(os.path.join("results", "whisper_base_cheespeech"))
+    wers.append(np.array(wer_scores) * 100)
+    audio_nums_arr.append(audio_nums)        
+    plot_wer_scores(wers, audio_nums_arr, ["tiny", "base"], ["tab:blue", "tab:orange"])
 
-    results = calculate_datasets_global_wer(folders)
-    print("Resultados para el leaderboard:") 
-    for model_name, metrics in results.items():
-        print(f"Modelo: {model_name}")
-        for metric_name, value in metrics.items():
-            print(f"  {metric_name}: {value}")
+    # results = calculate_datasets_global_wer(folders)
+    # print("Resultados para el leaderboard:") 
+    # for model_name, metrics in results.items():
+    #     print(f"Modelo: {model_name}")
+    #     for metric_name, value in metrics.items():
+    #         print(f"  {metric_name}: {value}")

@@ -1,5 +1,6 @@
 import re
 import unicodedata
+from num2words import num2words
 import chee_speech.utils.xml as xml
 
 def remove_punctuation(text:str, remove_all_punctuation:bool, excluded_chars:str = ''):
@@ -33,6 +34,23 @@ def normalize_characters(text, normalize_uppercase=True, remove_accents=True):
         
     return text
 
+def normalize_numbers_to_words(text: str, lang: str = 'es') -> str:
+    """
+    Convert all numbers in text to their word representation.
+    
+    Args:
+        text (str): Text containing numbers to normalize.
+        lang (str): Language code for num2words (default: 'es' for Spanish).
+    
+    Returns:
+        str: Text with numbers converted to words.
+    
+    Example:
+        >>> normalize_numbers_to_words("Tengo 25 años y 3 hermanos")
+        "Tengo veinticinco años y tres hermanos"
+    """
+    return re.sub(r'\b\d+\b', lambda m: num2words(int(m.group(0)), lang=lang), text)
+
 def normalize(text: str, remove_all_punctuation: bool, normalize_uppercase: bool, allowed_chars: str, special_attrs_config: dict = None):
     """
     Removes XML tags, punctuation, and uppercase as specified, and cleans extra whitespace.
@@ -51,6 +69,8 @@ def normalize(text: str, remove_all_punctuation: bool, normalize_uppercase: bool
     text = remove_punctuation(text, remove_all_punctuation, allowed_chars)
 
     text = normalize_characters(text, normalize_uppercase)
+    
+    text = normalize_numbers_to_words(text)
     
     # Collapse multiple spaces to single space and trim edges
     final_result = re.sub(r'\s+', ' ', text).strip()
