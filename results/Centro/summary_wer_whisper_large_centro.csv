@@ -1,3 +1,0 @@
-﻿Model,Dataset,Average_WER,Average_CER,Global_WER,Total_Substitutions,Total_Deletions,Total_Insertions,Total_Words
-Whisper Large,Centro,0.1627616343144167,0.11040284619940058,0.1661951909476662,83,121,31,1414
-,,

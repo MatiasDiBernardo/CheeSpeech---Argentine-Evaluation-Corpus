@@ -1,0 +1,6 @@
+﻿audio_filename,wer,cer,wer_S,wer_D,wer_I,N_words,GT_trans,pred_trans,GT_trans_norm,pred_trans_norm
+audio_0043.wav,35.8974,21.5789,8,5,1,39,"Cuando <alargamiento palabra=""lo"">looo</alargamiento> <risa>je jeje</risa> <filler>eeh</filler> me olvidé lo que iba a decir. Me imaginé todo. Me imaginé todo. ¿Por qué su nombre de Porteña la localidad? Vamos a dejar el misterio para siempre. No, es por una estación de tren.
+
+
+
+"," Cuando lo... ¿Por qué me olvidé de qué decir? Me imaginé todo. ¿Por qué es un hombre deporteña en la localidad? Vamos a dejar el misterio para siempre. No, es por alguna estación de tren.",cuando lo je jeje me olvide lo que iba a decir me imagine todo me imagine todo por que su nombre de portena la localidad vamos a dejar el misterio para siempre no es por una estacion de tren,cuando lo por que me olvide de que decir me imagine todo por que es un hombre deportena en la localidad vamos a dejar el misterio para siempre no es por alguna estacion de tren

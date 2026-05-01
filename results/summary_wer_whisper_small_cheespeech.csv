@@ -1,0 +1,4 @@
+﻿Model,Dataset,Average_WER,Average_CER,Global_WER,Total_Substitutions,Total_Deletions,Total_Insertions,Total_Words
+Whisper Small,CheeSpeech_BsAs,15.4798,8.1106,15.9228,147,101,16,1658
+Whisper Small,CheeSpeech_Cordoba,23.1794,13.1185,23.9038,173,114,51,1414
+Whisper Small,CheeSpeech_Total,19.4538,10.6953,19.5964,320,215,67,3072

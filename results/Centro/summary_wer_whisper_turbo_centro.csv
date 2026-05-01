@@ -1,3 +1,0 @@
-﻿Model,Dataset,Average_WER,Average_CER,Global_WER,Total_Substitutions,Total_Deletions,Total_Insertions,Total_Words
-Whisper Turbo,Centro,0.14875586615197228,0.09694470935505296,0.15417256011315417,82,106,30,1414
-,,
