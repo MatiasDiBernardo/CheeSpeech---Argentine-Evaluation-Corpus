@@ -1,8 +1,13 @@
 import pandas as pd
 import numpy as np
 import os
+from pathlib import Path
+import sys
 
-# ---------------------
+parent_dir = str(Path(__file__).resolve().parents[1])
+sys.path.append(parent_dir)
+from metrics import TranscriptionMetrics, save_metrics
+import analytics.wer as wer
 
 def get_metadata_stats(folder):
     """
@@ -30,6 +35,7 @@ def get_metadata_stats(folder):
     total_speakers_ms = 0
     total_men_ms = 0
     total_women_ms = 0
+    total_length = 0
     regions = {}
 
     for file_name in csv_files:
@@ -58,6 +64,9 @@ def get_metadata_stats(folder):
             else:
                 regions[region] = 1
 
+            # Accumulate total length
+            total_length += df.loc[0, "duracion"]
+
             # print(f"  -> Procesado: {file_name}")
 
         except pd.errors.EmptyDataError:
@@ -79,15 +88,38 @@ def get_metadata_stats(folder):
         "Total Multi Speaker": [total_ms],
         "Hombres MS": [male_dist_ms],
         "Mujeres MS": [female_dist_ms],
+        "Largo Total (segs)": [total_length]
     })
 
     # Add region counts as separate columns
     for region, count in regions.items():
         stats_df[f"Region {region}"] = [count]
 
-    stats_df.to_excel(f"analytics/stats_{total_files}.xlsx", index=False)
+    stats_df.to_excel(f"chee_speech/analytics/stats_{total_files}.xlsx", index=False)
 
     print("\n¡Proceso completado!")
+
+def metadata_add_audio_properties(metadata_folder, audio_folder):
+    import soundfile as sf
+    # TODO: Implementar función para agregar propiedades de los audios (duración, tasa de muestreo, etc.) a los archivos de metadata correspondientes.
+    metadata_csvs = [os.path.join(metadata_folder, f) for f in os.listdir(metadata_folder) if f.endswith(".csv")]
+
+    if not metadata_csvs:
+        print("Aviso: No se encontraron archivos .csv en la carpeta de metadata.")
+        return
+
+    for file_path in metadata_csvs:
+        df = pd.read_csv(file_path)
+        audio_filename = df.loc[0, "audio_filename"]
+        audio_path = os.path.join(audio_folder, audio_filename)
+        if os.path.exists(audio_path):
+            audio, sr = sf.read(audio_path)
+            duration = len(audio) / sr
+            df.loc[0, "duracion"] = duration
+            df.loc[0, "fs"] = sr
+            df.to_csv(file_path, index=False)
+        else:
+            print(f"  -> Advertencia: El archivo de audio {audio_filename} no se encontró y fue omitido.")
 
 def get_wer_scores(folder):
     '''Iterates through the folder with results, reads the WER scores from each CSV and returns them as lists for plotting. Also returns the model name for labeling.'''
@@ -114,7 +146,6 @@ def get_wer_scores(folder):
 
 def plot_wer_scores(wer_scores_arrays, audio_nums_arrays, model_names = [], colors = []):
 
-    import numpy as np
     import matplotlib.pyplot as plt    
 
     plt.figure(figsize=(10, 6))
@@ -158,6 +189,8 @@ def calculate_datasets_global_wer(folders):
         avg_wer = values[0] / values[3] if values[3] > 0 else 0
         global_wer = values[1] / values[2] if values[2] > 0 else 0
         dict_results[model_name] = {
+            'Model': model_name,
+            'Dataset': model_name,
             'Avg WER': f"{np.round(avg_wer, 4) * 100}%",
             'Global WER': f"{np.round(global_wer, 4) * 100}%",
             'Total Errors':int(values[1]),
@@ -166,26 +199,141 @@ def calculate_datasets_global_wer(folders):
 
     return dict_results
 
+def recalculate_dataset_totals(model_name, dataset_name, metadata_folder, results_folder, uses_region = True):
+    results_csvs = [os.path.join(results_folder, f) for f in os.listdir(results_folder) if f.endswith(".csv")]
+
+    if not results_csvs:
+        print("Aviso: No se encontraron archivos .csv en la carpeta de resultados.")
+        return
+    
+    metrics_by_region = {}
+    total_metrics = TranscriptionMetrics(model=model_name, dataset=f"{dataset_name}_Total")
+    for file_path in results_csvs:
+        data_key = dataset_name
+        df = pd.read_csv(file_path)
+        if 'audio_filename' in df.columns and 'wer' in df.columns and 'cer' in df.columns and 'wer_S' in df.columns and 'wer_I' in df.columns and 'wer_D' in df.columns:
+            row = df.iloc[0]
+            audio_filename = row['audio_filename']
+
+            if uses_region:
+                metadata_filename = audio_filename.replace('audio', 'metadata').replace('.wav', '.csv')
+                metadata_path = os.path.join(metadata_folder, metadata_filename)
+                metadata = pd.read_csv(metadata_path)
+                if 'region' in metadata.columns:
+                    region = metadata['region'].iloc[0]
+                    data_key += f"_{region}"            
+
+                if data_key not in metrics_by_region:
+                    metrics_by_region[data_key] = TranscriptionMetrics(model=model_name, dataset=data_key)
+
+                metrics_by_region[data_key].add_scores(row['wer']/100, row['cer']/100, row['wer_S'], row['wer_D'], row['wer_I'], row['N_words'])
+    
+            total_metrics.add_scores(row['wer']/100, row['cer']/100, row['wer_S'], row['wer_D'], row['wer_I'], row['N_words'])          
+            
+        else:
+            print(f"  -> Advertencia: El archivo {file_path} no contiene las columnas necesarias y fue omitido.")
+
+    for metric in metrics_by_region.values():
+        metric.finalize()    
+    total_metrics.finalize()
+
+    # Build metrics list with regions and total row
+    metrics_list = list(metrics_by_region.values()) if uses_region else []
+    metrics_list.append(total_metrics)
+
+    if metrics_list:
+        csv_filename = f"results/summary_wer_{model_name.lower().replace(' ', '_')}_{dataset_name.lower()}_recalc.csv"
+        save_metrics(metrics_list, csv_filename, overwrite=False)
+    else:
+        print("Aviso: No se calcularon métricas para guardar.")
+
+    return metrics_list
+
+def renormalize_and_calculate_dataset_totals(model_name, dataset_name, metadata_folder, results_folder, uses_region = True):
+    results_csvs = [os.path.join(results_folder, f) for f in os.listdir(results_folder) if f.endswith(".csv")]
+
+    if not results_csvs:
+        print("Aviso: No se encontraron archivos .csv en la carpeta de resultados.")
+        return
+    
+    scores_key_name = f'{model_name.lower().replace(' ', '_')}_{dataset_name.lower()}_renorm'
+    os.makedirs(os.path.join("results", scores_key_name), exist_ok=True)
+    metrics_by_region = {}
+    total_metrics = TranscriptionMetrics(model=model_name, dataset=f"{dataset_name}_Total")
+    for file_path in results_csvs:
+        data_key = dataset_name
+        df = pd.read_csv(file_path)
+        if 'audio_filename' in df.columns and 'GT_trans' in df.columns and 'pred_trans' in df.columns:
+            row = df.iloc[0]
+            audio_filename = row['audio_filename']
+
+            text_ref = row['GT_trans']
+            text_hyp = row['pred_trans']
+            wer_score, cer_score, wer_s, wer_d, wer_i, word_count = wer.get_transcript_scores(audio_filename, scores_key_name, text_ref, text_hyp)
+
+            if uses_region:
+                metadata_filename = audio_filename.replace('audio', 'metadata').replace('.wav', '.csv')
+                metadata_path = os.path.join(metadata_folder, metadata_filename)
+                metadata = pd.read_csv(metadata_path)
+                if 'region' in metadata.columns:
+                    region = metadata['region'].iloc[0]
+                    data_key += f"_{region}"            
+
+                if data_key not in metrics_by_region:
+                    metrics_by_region[data_key] = TranscriptionMetrics(model=model_name, dataset=data_key)                
+                
+                metrics_by_region[data_key].add_scores(wer_score, cer_score, wer_s, wer_d, wer_i, word_count)
+
+            total_metrics.add_scores(wer_score, cer_score, wer_s, wer_d, wer_i, word_count)
+            
+        else:
+            print(f"  -> Advertencia: El archivo {file_path} no contiene las columnas necesarias y fue omitido.")
+
+    for metric in metrics_by_region.values():
+        metric.finalize()    
+    total_metrics.finalize()
+
+    # Build metrics list with regions and total row
+    metrics_list = list(metrics_by_region.values()) if uses_region else []
+    metrics_list.append(total_metrics)
+
+    if metrics_list:
+        csv_filename = f"results/summary_wer_{model_name.lower().replace(' ', '_')}_{dataset_name.lower()}_renorm.csv"
+        save_metrics(metrics_list, csv_filename, overwrite=False)
+    else:
+        print("Aviso: No se calcularon métricas para guardar.")
+
+    return metrics_list
+
+
 
 if __name__ == "__main__":
     # Define the folder where your original CSVs are located
     # folder = os.path.join("data", "metadata")
-    folders = [os.path.join("results", "Buenos Aires"), os.path.join("results", "Centro")]
+    # folders = [os.path.join("results", "Buenos Aires"), os.path.join("results", "Centro")]
 
     # get_metadata_stats(folder)
 
-    # models = ["whisper_tiny", "whisper_base"] #, "whisper_small", "whisper_medium"]
-    colors = ["tab:blue", "tab:orange"] #, "tab:green", "tab:red"]
-    wers = []
-    audio_nums_arr = []
-    # for model in models:
-    audio_nums, wer_scores, model_name = get_wer_scores(os.path.join("results", "whisper_tiny_cheespeech"))    
-    wers.append(np.array(wer_scores))
-    audio_nums_arr.append(audio_nums)
-    audio_nums, wer_scores, model_name = get_wer_scores(os.path.join("results", "whisper_base_cheespeech"))
-    wers.append(np.array(wer_scores) * 100)
-    audio_nums_arr.append(audio_nums)        
-    plot_wer_scores(wers, audio_nums_arr, ["tiny", "base"], ["tab:blue", "tab:orange"])
+    metadata_folder = os.path.join("data", "metadata")
+    dataset_name = "cheespeech"
+    # models = ["whisper_tiny", "whisper_base", "whisper_small", "whisper_medium", "whisper_large", "whisper_turbo"]
+    models = ["Whisper Large", "Whisper Turbo", "ElevenLabs", "Nvidia-Parakeet"]
+    # colors = ["tab:blue", "tab:orange", "tab:green"]
+    # wers = []
+    # audio_nums_arr = []
+    for model in models:
+        model_name = model.lower().replace(' ', '_')
+        renormalize_and_calculate_dataset_totals(model, dataset_name, metadata_folder, os.path.join("results", f"{model_name}_{dataset_name}"))
+        # audio_nums, wer_scores, model_name = get_wer_scores(os.path.join("results", f"{model}_{dataset_name}"))
+        # wers.append(np.array(wer_scores))
+        # audio_nums_arr.append(audio_nums)
+    # audio_nums, wer_scores, model_name = get_wer_scores(os.path.join("results", "whisper_base_cheespeech"))
+    # wers.append(np.array(wer_scores) * 100)
+    # audio_nums_arr.append(audio_nums)        
+    # audio_nums, wer_scores, model_name = get_wer_scores(os.path.join("results", "whisper_base_cheespeech"))
+    # wers.append(np.array(wer_scores) * 100)
+    # audio_nums_arr.append(audio_nums)        
+    # plot_wer_scores(wers, audio_nums_arr, models, colors)
 
     # results = calculate_datasets_global_wer(folders)
     # print("Resultados para el leaderboard:") 
@@ -193,3 +341,7 @@ if __name__ == "__main__":
     #     print(f"Modelo: {model_name}")
     #     for metric_name, value in metrics.items():
     #         print(f"  {metric_name}: {value}")
+
+    # metadata_folder = os.path.join("data", "metadata")
+    # audio_folder = os.path.join("data", "audios")    
+    # metadata_add_audio_properties(metadata_folder, audio_folder)

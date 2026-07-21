@@ -2,9 +2,10 @@ import os
 import jiwer
 import pandas as pd
 from numpy import round
-import chee_speech.utils.normalization as norm
+# import chee_speech.utils.normalization as norm
+import utils.normalization as norm
 
-def get_transcript_scores(audio_filename, scores_key_name, text_ref, text_hyp, remove_all_punctuation, normalize_uppercase, allowed_special_chars, attribute_config=None, save_csv=True):
+def get_transcript_scores(audio_filename, scores_key_name, text_ref, text_hyp, remove_all_punctuation=True, normalize_uppercase=True, allowed_special_chars='', attribute_config=None, save_csv=True):
     """
     Calculates WER and CER between reference and hypothesis text after normalizing them.
     """

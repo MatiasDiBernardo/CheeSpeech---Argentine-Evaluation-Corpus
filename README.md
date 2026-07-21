@@ -8,16 +8,18 @@ This repository contains utils to create an argentine speech corpus with extensi
     <thead>
         <tr> <th rowspan=2>Model</th> <th rowspan=2>Avg WER</th> <th rowspan=2>Global WER</th> <th colspan=2>Bs. As.</th> <th colspan=2>Centro</th> </tr>
         <tr>
-                                                                                    <th>Avg WER</th><th>Global WER</th>  <th >Avg WER</th><th>Global WER</th>
+         <th>Avg WER</th><th>Global WER</th>  <th >Avg WER</th><th>Global WER</th>
         </tr>
     </thead>
     <tbody>
-        <tr> <td>Whisper Turbo </td>  <td>12,59 %</td> <td>12,96 %</td>  <td>9,94 %</td> <td>10,68 %</td>  <td>15,08 %</td> <td>15,63 %</td>  </tr>
-        <tr> <td>Whisper Large </td>  <td>13,55 %</td> <td>13,87 %</td>  <td>10,56 %</td> <td>11,58 %</td>  <td>16,36 %</td> <td>16,55 %</td>  </tr>
-        <tr> <td>Whisper Medium </td>  <td>16,25 %</td> <td>16,44 %</td>  <td>12,01 %</td> <td>12,91 %</td>  <td>20,18 %</td> <td>20,58 %</td>  </tr>
-        <tr> <td>Whisper Small </td>  <td>19,45 %</td> <td>19,6 %</td>  <td>15,48 %</td> <td>15,92 %</td>  <td>23,18 %</td> <td>23,9 %</td>  </tr>
-        <tr> <td>Whisper Base </td>  <td>30,21 %</td> <td>31,18 %</td>  <td>23,6 %</td> <td>26,18 %</td>  <td>36,41 %</td> <td>37,01 %</td>  </tr>
-        <tr> <td>Whisper Tiny </td>  <td>41,59 %</td> <td>42,25 %</td>  <td>36,61 %</td> <td>38,54 %</td>  <td>46,26 %</td> <td>46,61 %</td>  </tr>
+        <tr> <td>Eleven Labs </td>  <td>11,04 %</td> <td>10,93 %</td>  <td>8,6 %</td> <td>9,04 %</td>  <td>13,65 %</td> <td>13,46 %</td>  </tr>
+        <tr> <td>Whisper Turbo </td>  <td>11,34 %</td> <td>11,73 %</td>  <td>10,07 %</td> <td>10,67 %</td>  <td>12,7 %</td> <td>13,14 %</td>  </tr>
+        <tr> <td>Whisper Large </td>  <td>12,59 %</td> <td>12,91 %</td>  <td>10,69 %</td> <td>11,58 %</td>  <td>14,63 %</td> <td>14,68 %</td>  </tr>
+        <tr> <td>Nvidia Parakeet </td>  <td>15,18 %</td> <td>14,95 %</td>  <td>13,18 %</td> <td>13,1 %</td>  <td>17,31 %</td> <td>17,44 %</td>  </tr>
+        <tr> <td>Whisper Medium </td>  <td>15,85 %</td> <td>15,93 %</td>  <td>12,29 %</td> <td>13,04 %</td>  <td>19,66 %</td> <td>19,79 %</td>  </tr>
+        <tr> <td>Whisper Small </td>  <td>18,63 %</td> <td>18,74 %</td>  <td>15,94 %</td> <td>16,31 %</td>  <td>21,52 %</td> <td>21,98 %</td>  </tr>
+        <tr> <td>Whisper Base </td>  <td>29,34 %</td> <td>30,43 %</td>  <td>23,61 %</td> <td>26,32 %</td>  <td>35,48 %</td> <td>35,93 %</td>  </tr>
+        <tr> <td>Whisper Tiny </td>  <td>41,29 %</td> <td>41,95 %</td>  <td>36,83 %</td> <td>38,81 %</td>  <td>46,06 %</td> <td>46,15 %</td>  </tr>
     </tbody>
 </table>
 

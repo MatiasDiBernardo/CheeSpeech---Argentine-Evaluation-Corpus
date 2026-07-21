@@ -8,12 +8,12 @@ Dataset:
   uses_region: true
 
 ASR:
-  type: "Whisper"
-  model_name: "Whisper Medium"
+  type: "Nvidia-Parakeet"    # Options: Whisper, ElevenLabs, Nvidia-Parakeet
+  model_name: "Nvidia-Parakeet" 
   Whisper:
-    model_size: "medium"    # Options: tiny, base, small, medium, large, turbo
-  
-
+    model_size: "turbo"    # Options: tiny, base, small, medium, large, turbo
+  ElevenLabs:
+    api_key: "insert key"
 Normalization:
   remove_all_punctuation: true    # if true, removes all punctuation. If false, keeps grammatically relevant punctuation (.,;?!).
   normalize_uppercase: true

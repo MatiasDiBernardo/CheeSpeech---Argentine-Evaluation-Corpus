@@ -3,7 +3,6 @@ import yaml
 import tqdm
 import pandas as pd
 
-from chee_speech.ASR.whisper import get_model, number_tokens
 from chee_speech.analytics.wer import get_transcript_scores
 from chee_speech.metrics import TranscriptionMetrics, save_metrics
 
@@ -60,11 +59,21 @@ def transcribe_folder_and_score(audio_folder, transcript_folder, metadata_folder
     scores_key_name = f"{model_name}_{DATASET_NAME}".lower().replace(' ', '_')
     os.makedirs(os.path.join("results", scores_key_name), exist_ok=True)
 
+    # Load ASR model
     if ASR_TYPE == "Whisper":
-            asr_model = get_model()
+        from chee_speech.ASR.whisper import get_model, number_tokens
+        asr_model = get_model()
+    elif ASR_TYPE == "ElevenLabs":
+        from chee_speech.ASR.elevenlabs import elevenlabs
+        asr_model = elevenlabs
+    elif ASR_TYPE == "Nvidia-Parakeet":
+        import chee_speech.ASR.parakeet as prkt
+        asr_model = prkt.get_model()
     else:
         raise ValueError(f"Unknown ASR type: {ASR_TYPE}")
     
+
+    # Transcription and WER loop
     for audio_file in tqdm.tqdm(audio_files, desc="Transcribing audio files"):
         # Extract base name without extension
         num = os.path.splitext(audio_file)[0].split('_')[1]
@@ -100,9 +109,14 @@ def transcribe_folder_and_score(audio_folder, transcript_folder, metadata_folder
         
         audio_path = os.path.join(audio_folder, audio_file)
 
-        # If is not Whisper, could have errors. Best should be to implement a function in ASR module.
-        text_hyp = asr_model.transcribe(audio_path, fp16=False)["text"]
-        # , suppress_tokens=number_tokens Encourage the model to transcribe numbers as text.
+        if ASR_TYPE == "Whisper":
+            text_hyp = asr_model.transcribe(audio_path, fp16=False)["text"]
+        elif ASR_TYPE == "ElevenLabs":
+            with open(audio_path, 'rb') as file_binary:
+                res = elevenlabs.speech_to_text.convert(file=file_binary, model_id="scribe_v2", language_code='spa', tag_audio_events=True, diarize=True)            
+            text_hyp = res.text
+        elif ASR_TYPE == "Nvidia-Parakeet":
+            text_hyp = prkt.transcribe(asr_model, audio_path)
         
         # Calculate scores
         wer_score, cer_score, wer_s, wer_d, wer_i, word_count = get_transcript_scores(audio_file, scores_key_name, text_ref, text_hyp, remove_all_punctuation, normalize_uppercase, filler_symbol, special_attrs_config, save_csv=save_csv)

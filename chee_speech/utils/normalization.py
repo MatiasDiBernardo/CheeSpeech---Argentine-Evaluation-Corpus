@@ -16,7 +16,7 @@ def remove_punctuation(text:str, remove_all_punctuation:bool, excluded_chars:str
     if not remove_all_punctuation:
         excluded_chars += r'\.,;?!¡¿'  # Allowed punctuation marks: .,;?!¡¿
 
-    return re.sub(r'[^\w\s' + excluded_chars + r'\-]', '', text)        
+    return re.sub(r'[^\w\s' + excluded_chars + r'\-]', ' ', text)        
 
 def normalize_characters(text, normalize_uppercase=True, remove_accents=True):
     if normalize_uppercase:
@@ -51,7 +51,7 @@ def normalize_numbers_to_words(text: str, lang: str = 'es') -> str:
     """
     return re.sub(r'\b\d+\b', lambda m: num2words(int(m.group(0)), lang=lang), text)
 
-def normalize(text: str, remove_all_punctuation: bool, normalize_uppercase: bool, allowed_chars: str, special_attrs_config: dict = None):
+def normalize(text: str, remove_all_punctuation: bool, normalize_uppercase: bool, allowed_chars: str, special_attrs_config: dict = None, model = ''):
     """
     Removes XML tags, punctuation, and uppercase as specified, and cleans extra whitespace.
     """
@@ -61,6 +61,9 @@ def normalize(text: str, remove_all_punctuation: bool, normalize_uppercase: bool
 
     # Por ahora saco los fillers pero habria que reemplazarlos con un simbolo, acá y en la transcripción del modelo.
     text = xml.replace_xml_block(text, "filler", "")
+
+    # Por ahora saco las risas pero habria que reemplazarlos con un simbolo, acá y en la transcripción del modelo.
+    text = xml.replace_xml_block(text, "risa", "")
 
     text = xml.process_special_tags(text, special_attrs_config)
     
